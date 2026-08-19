@@ -47,7 +47,26 @@ docker compose up --build
 
 UI: http://localhost:8081 · API: http://localhost:8080 · Node no se publica.
 
-En cloud (Railway) el frontend usa Nixpacks + `serve` (`VITE_API_URL` = URL pública de Go). El `Dockerfile.compose` + nginx es solo para Docker Compose.
+## Deploy (Railway)
+
+- UI: https://matrix-qr-production.up.railway.app
+- API Go: https://go-api-production-5bd7.up.railway.app
+- Node: red privada (sin URL pública). El cliente no lo usa.
+
+Demo JWT: **`admin` / `admin`**.
+
+```bash
+TOKEN=$(curl -s -X POST https://go-api-production-5bd7.up.railway.app/auth/login \
+  -H "Content-Type: application/json" \
+  -d "{\"username\":\"admin\",\"password\":\"admin\"}" | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
+
+curl -s -X POST https://go-api-production-5bd7.up.railway.app/api/v1/matrix \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d "{\"matrix\":[[1,2],[3,4],[5,6]]}"
+```
+
+En Railway el frontend usa Nixpacks + `serve` (`VITE_API_URL` = URL de Go). El `Dockerfile.compose` + nginx es solo para Docker Compose.
 
 ## API
 
