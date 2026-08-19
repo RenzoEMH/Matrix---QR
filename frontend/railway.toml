@@ -1,0 +1,8 @@
+# Railway: static Vite app (no nginx / no Docker Compose hostname).
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyType = "ON_FAILURE"

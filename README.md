@@ -47,6 +47,8 @@ docker compose up --build
 
 UI: http://localhost:8081 · API: http://localhost:8080 · Node no se publica.
 
+En cloud (Railway) el frontend usa Nixpacks + `serve` (`VITE_API_URL` = URL pública de Go). El `Dockerfile.compose` + nginx es solo para Docker Compose.
+
 ## API
 
 Públicos: `GET /health`, `POST /auth/login`. Protegido: `POST /api/v1/matrix`.
