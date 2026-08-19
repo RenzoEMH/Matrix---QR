@@ -1,0 +1,45 @@
+services:
+  node-api:
+    build: ./node-api
+    environment:
+      PORT: "3000"
+    expose:
+      - "3000"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  go-api:
+    build: ./go-api
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      NODE_API_URL: http://node-api:3000
+      JWT_SECRET: ${JWT_SECRET:-dev-only-change-me-please}
+      JWT_USERNAME: ${JWT_USERNAME:-admin}
+      JWT_PASSWORD: ${JWT_PASSWORD:-admin}
+      JWT_TTL: ${JWT_TTL:-1h}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+    depends_on:
+      node-api:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8081:80"
+    depends_on:
+      go-api:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
