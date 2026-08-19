@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v3"
@@ -132,7 +133,7 @@ func validateIncoming(a matrix.Matrix) error {
 	}
 	rows, cols := matrix.Dims(a)
 	if rows > maxMatrixDim || cols > maxMatrixDim {
-		return errors.New("matrix exceeds 50×50 limit")
+		return fmt.Errorf("matrix exceeds %d×%d limit", maxMatrixDim, maxMatrixDim)
 	}
 	return nil
 }

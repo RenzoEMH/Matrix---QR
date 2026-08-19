@@ -43,6 +43,7 @@ export function MatrixPlayground({ token, onLogout, onUnauthorized }) {
     }
 
     setPending(true);
+    setResult(null);
     try {
       const data = await analyzeMatrix(matrix, token);
       setResult(data);

@@ -70,6 +70,14 @@ describe("POST /api/v1/stats", () => {
     expect(res.body.error).toMatch(/50/);
   });
 
+  test("rejects non-finite values", async () => {
+    const res = await request(app)
+      .post("/api/v1/stats")
+      .send({ matrices: { q: [[NaN]] } });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/finite/);
+  });
+
   test("unknown route is json 404", async () => {
     const res = await request(app).get("/nope");
     expect(res.status).toBe(404);

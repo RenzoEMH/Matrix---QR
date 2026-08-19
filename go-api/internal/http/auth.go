@@ -35,9 +35,13 @@ func login(tokens *auth.Service) fiber.Handler {
 			return internalError(c, err)
 		}
 
+		expiresIn := int64(time.Until(exp).Seconds())
+		if expiresIn < 0 {
+			expiresIn = 0
+		}
 		return c.JSON(loginResponse{
 			Token:     token,
-			ExpiresIn: int64(time.Until(exp).Seconds()),
+			ExpiresIn: expiresIn,
 		})
 	}
 }

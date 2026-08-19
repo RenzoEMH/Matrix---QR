@@ -6,6 +6,7 @@ class ValidationError extends Error {
 }
 
 const MAX_DIM = 50;
+const MAX_MATRICES = 16;
 
 function parseMatrices(body) {
   if (body == null || typeof body !== "object" || Array.isArray(body)) {
@@ -20,6 +21,9 @@ function parseMatrices(body) {
   const names = Object.keys(matrices);
   if (names.length === 0) {
     throw new ValidationError("matrices must not be empty");
+  }
+  if (names.length > MAX_MATRICES) {
+    throw new ValidationError(`at most ${MAX_MATRICES} matrices allowed`);
   }
 
   const out = {};
@@ -41,7 +45,7 @@ function validateMatrix(name, matrix) {
   const rows = matrix.length;
   const cols = matrix[0].length;
   if (rows > MAX_DIM || cols > MAX_DIM) {
-    throw new ValidationError(`matrix "${name}" exceeds 50×50 limit`);
+    throw new ValidationError(`matrix "${name}" exceeds ${MAX_DIM}×${MAX_DIM} limit`);
   }
 
   for (let i = 0; i < rows; i++) {
@@ -63,4 +67,4 @@ function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-module.exports = { ValidationError, parseMatrices, MAX_DIM };
+module.exports = { ValidationError, parseMatrices, MAX_DIM, MAX_MATRICES };

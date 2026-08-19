@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -13,8 +14,9 @@ import (
 )
 
 const (
-	defaultTimeout = 5 * time.Second
-	statsPath      = "/api/v1/stats"
+	defaultTimeout     = 5 * time.Second
+	statsPath          = "/api/v1/stats"
+	maxStatsResponse   = 1 << 20 // 1 MiB
 )
 
 // ErrUnavailable means the Node stats API could not be reached or returned
@@ -89,7 +91,7 @@ func (c *Client) ComputeStats(ctx context.Context, req StatsRequest) (*StatsResp
 	}
 
 	var out StatsResponse
-	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+	if err := json.NewDecoder(io.LimitReader(resp.Body, maxStatsResponse)).Decode(&out); err != nil {
 		return nil, fmt.Errorf("%w: decode response: %v", ErrUnavailable, err)
 	}
 	return &out, nil

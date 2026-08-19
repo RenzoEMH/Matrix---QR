@@ -16,4 +16,10 @@ const child = spawn(
   { stdio: "inherit", shell: true },
 );
 
+function shutdown() {
+  child.kill("SIGTERM");
+}
+
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
 child.on("exit", (code) => process.exit(code ?? 1));

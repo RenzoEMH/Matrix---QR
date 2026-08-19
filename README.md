@@ -9,7 +9,7 @@ flowchart LR
   Node -->|stats| Go
 ```
 
-## Decisiones
+## Decisiones sobre el enunciado
 
 El enunciado mezcla **rotar** y **QR**. Se hacen las dos sobre la matriz original `A`:
 
@@ -25,7 +25,7 @@ Node recorre **Q + R + rotada** (max, min, promedio, suma) y marca si cada una e
 
 Límites: matriz no vacía, rectangular, números finitos, máximo **50×50**. JWT HS256 en Go; Node no autentica (red interna).
 
-## Cómo correr
+## Cómo ejecutar localmente
 
 Requisitos: Go 1.26, Node 24, Docker. Demo JWT: **`admin` / `admin`**.
 
@@ -65,8 +65,6 @@ curl -s -X POST https://go-api-production-5bd7.up.railway.app/api/v1/matrix \
   -H "Authorization: Bearer $TOKEN" \
   -d "{\"matrix\":[[1,2],[3,4],[5,6]]}"
 ```
-
-En Railway el frontend usa Nixpacks + `serve` (`VITE_API_URL` = URL de Go). El `Dockerfile.compose` + nginx es solo para Docker Compose.
 
 ## API
 
